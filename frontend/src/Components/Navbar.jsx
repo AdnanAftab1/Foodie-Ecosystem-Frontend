@@ -1,0 +1,25 @@
+import { useState } from "react";
+
+export function Navbar({signup='none',menu1='home'})  //signup is used to show the signup page and menu is used to show the menu page
+{
+    console.log("Navabar Loaded");
+    const [menu,setMenu]=useState(menu1);
+    return (
+        <div className="relative  w-full flex justify-around items-center font-[outfit]">
+            <div className="flex ">            
+                <p className="text-3xl font-extrabold text-orange-500 max-sm:hidden">Foodie.</p>
+            </div>
+            <ul className="flex  p-4 text-slate-500">
+                <li onClick={()=>{setMenu('home')}} className={menu=='home'?'underline p-2':'p-2'}>home</li>
+                <li onClick={()=>{setMenu('menu')}} className={menu=='menu'?'underline p-2':'p-2'}>menu</li>
+                <li onClick={()=>{setMenu('mobile-app')}} className={menu=='mobile-app'?'underline p-2':'p-2'}>mobile-app</li>
+                <li onClick={()=>{setMenu('contact-us')}} className={menu=='contact-us'?'underline p-2':'p-2'}>contact us</li>
+            </ul>
+            <ul className="flex p-4  justify-items-end items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>             
+            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M240-80q-33 0-56.5-23.5T160-160v-480q0-33 23.5-56.5T240-720h80q0-66 47-113t113-47q66 0 113 47t47 113h80q33 0 56.5 23.5T800-640v480q0 33-23.5 56.5T720-80H240Zm0-80h480v-480h-80v80q0 17-11.5 28.5T600-520q-17 0-28.5-11.5T560-560v-80H400v80q0 17-11.5 28.5T360-520q-17 0-28.5-11.5T320-560v-80h-80v480Zm160-560h160q0-33-23.5-56.5T480-800q-33 0-56.5 23.5T400-720ZM240-160v-480 480Z"/></svg>
+            <button className="m-2 p-3 pt-0 pb-0 border-2 rounded-xl"> Sign Up </button>
+            </ul>
+        </div>
+    )
+}
