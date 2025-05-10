@@ -15,3 +15,14 @@
     @apply flex flex-col items-center justify-center
 }
 
+.Circular_Box{
+    @apply object-cover w-20 h-20 rounded-[100%];
+}
+.Circular_Box:active{
+    @apply outline-5 outline-orange-500;
+    transition-duration: 200ms;
+}
+
+.Circular_Box_Outline{
+    @apply outline-5 outline-orange-500
+}

@@ -40,7 +40,7 @@ export function Home() {
         favourites.push(<div className="Central_Default p-3 rounded-lg m-5 shadow-md"
          key={index}>
         <img
-            className="object-cover w-50 h-50 rounded-lg "
+            className="object-cover w-50 h-50 rounded-lg  hover:scale-105  transition-transform duration-300 "
             src={`https://foodish-api.com/images/${foodItem.name}/${foodItem.name}${index+1}.jpg`}
             />
         <div className="font-semibold">{foodItem.name}</div>
@@ -57,9 +57,9 @@ export function Home() {
         </>
         <div className="flex p-2 scroll-x overflow-x-auto">
             {foodItems.map((item, index) => (
-                <div key={index} className="place-self-center flex flex-col items-center rounded-lg m-5">
+                <div key={index} className="place-self-center flex flex-col items-center rounded-lg m-5 hover:scale-105 transition-transform duration-300">
                     <img
-                        className={"object-cover w-20 h-20 rounded-[100%] " + (currentIndex===index ? "outline-5 outline-orange-500" : "")}
+                        className={"Circular_Box " + (currentIndex==index?" Circular_Box_Outline":"") }
                         src={`https://foodish-api.com/images/${item.name}/${item.name}${index+1}.jpg`}
                         onClick={() => {
                             setCurrentIndex(index);
@@ -77,7 +77,7 @@ export function Home() {
                     favourites.map((item, index) => {
                        
                             return (
-                                <div key={index} className="Central_Default p-3 rounded-lg m-5 shadow-md">
+                                <div key={index} className="Central_Default p-3 rounded-lg m-5 shadow-md hover:scale-105 transition-transform duration-300">
                                     <img
                                         className="object-cover w-50 h-50 rounded-lg "
                                         src={`https://foodish-api.com/images/${foodItems[currentIndex].name}/${foodItems[currentIndex].name}${index+1}.jpg`}
