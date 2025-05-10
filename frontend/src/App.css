@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+.Navbar_Top{
+    @apply relative  w-full flex justify-around items-center font-[outfit]
+}
+
+.Logo_style{
+    @apply text-3xl font-extrabold text-orange-500 max-sm:hidden
+}
+.Button_style{
+    @apply m-2 p-3 pt-0 pb-0 border-2 rounded-xl
+}
+
+.Central_Default{
+    @apply flex flex-col items-center justify-center
+}
+

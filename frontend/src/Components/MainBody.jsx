@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import "../App.css";
 
 export function Home() {
     return (
-      <div className="flex flex-col items-center justify-center">
-        <div className="relative flex flex-col items-center justify-center w-full">
+      <div className="Central_Default">
+        <div className="relative Central_Default w-full">
           <img
             className="object-cover w-full h-full rounded-2xl"
             src="https://images.squarespace-cdn.com/content/v1/56a2785c69a91af45e06a188/1581442353249-5YKSPLFWQQHQCA055MHY/Restaurant-Food-Pics.png"
@@ -36,7 +37,7 @@ export function Home() {
       let foodItem;
       for (let index = 0; index <= 19; index++) {
         foodItem = foodItems[Math.floor(10*Math.random())];
-        favourites.push(<div className="flex flex-col justify-center p-3 rounded-lg m-5 shadow-md"
+        favourites.push(<div className="Central_Default p-3 rounded-lg m-5 shadow-md"
          key={index}>
         <img
             className="object-cover w-50 h-50 rounded-lg "
@@ -76,7 +77,7 @@ export function Home() {
                     favourites.map((item, index) => {
                        
                             return (
-                                <div key={index} className="flex flex-col justify-center p-3 rounded-lg m-5 shadow-md">
+                                <div key={index} className="Central_Default p-3 rounded-lg m-5 shadow-md">
                                     <img
                                         className="object-cover w-50 h-50 rounded-lg "
                                         src={`https://foodish-api.com/images/${foodItems[currentIndex].name}/${foodItems[currentIndex].name}${index+1}.jpg`}
@@ -106,8 +107,8 @@ export function Home() {
 
 export function AboutUs() {
     return (
-        <div className="flex flex-col items-center justify-center">
-            <div className="relative flex flex-col items-center justify-center w-full">
+        <div className="Central_Default">
+            <div className="relative Central_Default w-full">
                 <img
                     className="object-cover w-full h-full rounded-2xl"
                     src="https://images.squarespace-cdn.com/content/v1/56a2785c69a91af45e06a188/1581442353249-5YKSPLFWQQHQCA055MHY/Restaurant-Food-Pics.png"
