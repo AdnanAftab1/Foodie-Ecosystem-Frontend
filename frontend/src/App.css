@@ -21,8 +21,25 @@
 .Circular_Box:active{
     @apply outline-5 outline-orange-500;
     transition-duration: 200ms;
+    transition-timing-function: ease;
 }
 
 .Circular_Box_Outline{
     @apply outline-5 outline-orange-500
 }
+
+.Menu_Card{
+
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
