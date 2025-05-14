@@ -1,4 +1,4 @@
-export const FoodList=[
+export const FoodList1=[
   {
     id: 2,
     name: 'Biryani Special 1',

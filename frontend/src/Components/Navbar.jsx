@@ -11,7 +11,7 @@ export function Navbar()
     const navigate=useNavigate();
     console.log(cart);
     return (
-        <div className="Navbar_Top">
+        <div className="Navbar_Top z-20">
             <div className="flex">            
                 <p className="Logo_style" onClick={()=>{navigate("/")}}>Foodie.</p>
             </div>

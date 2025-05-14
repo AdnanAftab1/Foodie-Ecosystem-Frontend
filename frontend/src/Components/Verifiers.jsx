@@ -9,11 +9,11 @@ export function SignUp() {
     const email=useRef();
     const password=useRef();
     const navigate=useNavigate();
-
+    
     return (
         <div className="Central_Default w-min font-[outfit] bg-white border-2 border-gray-300 shadow-lg rounded-lg p-8 " style={{
         opacity: 0,
-        animation: "fadeIn 0.5s ease-in-out forwards",
+        animation: "fadeIn 0.5s ease-in-out forwards"
     }} >
             <h1 className="text-4xl font-bold mb-4">Sign Up</h1>
             <form className="flex flex-col space-y-4">

@@ -16,7 +16,7 @@
 }
 
 .Circular_Box{
-    @apply object-cover w-20 h-20 rounded-[100%];
+    @apply object-cover min-w-20 min-h-20 rounded-full;
 }
 .Circular_Box:active{
     @apply outline-5 outline-orange-500;
@@ -28,9 +28,6 @@
     @apply outline-5 outline-orange-500
 }
 
-.Menu_Card{
-
-}
 
 @keyframes fadeIn {
     0% {
@@ -43,3 +40,41 @@
     }
 }
 
+
+.dropbtn {
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  text-decoration: none;
+  display: flex;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    /* background-color: #f1f1f1 */
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  @apply grid grid-cols-1 place-items-center
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  /* background-color: #3e8e41; */
+}

@@ -1,6 +1,5 @@
 import React, {useContext, useState ,memo } from "react";
 import "../App.css";
-import { FoodList } from "../assets/MenuList";
 import { CartContext } from "../CartContext";
 
 export function Home() {
@@ -34,7 +33,7 @@ export function MainFrame() {
 
   export function Menu() {
     let options = [
-    "Top Rated",
+  "Top Rated",
   "biryani",
   "burger",
   "butter-chicken",
@@ -46,21 +45,21 @@ export function MainFrame() {
   "rice",
   "samosa"
 ];
-      const [currentIndex, setCurrentIndex] = useState(-1);
+      const [currentIndex, setCurrentIndex] = useState(0);
     return (
         <>
         <>
         <p className="text-3xl font-semibold">Explore Our Menu</p>
         <p className="text-slate-500">dive into a world of rich flavors and culinary delights. Whether you're craving something spicy like biryani or dosa, or in the mood for comfort food like butter chicken or pasta, there's something here for every taste bud. From quick bites like samosas and burgers to hearty meals like pizza and rice dishes, the variety ensures you'll never run out of delicious options. Don’t forget to satisfy your sweet tooth with a tempting dessert at the end. Each item is crafted to delight, so take your time, explore the menu, and enjoy every bite.</p>
         </>
-        <div className="flex p-2 scroll-x overflow-x-auto">
+        <div className="flex p-2 max-w-screen overflow-x-scroll">
             {options.map((item, index) => (
                 <div key={index} className="place-self-center flex flex-col items-center rounded-lg m-5 hover:scale-105 transition-transform duration-300 ">
                     <img
-                        className={"Circular_Box " + (currentIndex==index-1?" Circular_Box_Outline":"") }
+                        className={"Circular_Box aspect-square" + (currentIndex==index?" Circular_Box_Outline":"") }
                         src={(index==0)?`https://cdn-icons-png.flaticon.com/512/1486/1486474.png`:`https://foodish-api.com/images/${item}/${item}1.jpg`}
                         onClick={() => {
-                            setCurrentIndex(index-1);
+                            setCurrentIndex(index);
                         }}
                     />
                     <div className="font-semibold">{item}</div>
@@ -96,8 +95,9 @@ export function AboutUs() {
 //The Array must have Category , Name, Image, Price, Description, Rating, Reviews,ID
 const MenuBar= memo(
 function MenuBar({curr,fdItems}) {
+    const {FoodList}=useContext(CartContext);
     console.log(fdItems[curr]);
-    if (curr != -1) {
+    if (curr != 0) {
     return (
         <>
         <div className="text-2xl font-semibold">{fdItems[curr]}</div>
@@ -160,9 +160,8 @@ const Card_Generator= memo(
                 </button>
                 <div className="bg-orange-400 mx-1 text-white rounded-full px-2 text-xl">{quantity}</div>
                 <button onClick={()=>{
-                    addToCart(id);
+                    addToCart({id, name, description, image,value });
                     setQuantity(count=>count+1);
-
                     }} 
                     className="opacity-75 active:opacity-100 mx-1">
                     <svg className=" rounded-full" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M432-272h96v-160h160v-96H528v-160h-96v160H272v96h160v160Zm48 226q-91 0-169.99-34.08-78.98-34.09-137.41-92.52-58.43-58.43-92.52-137.41Q46-389 46-480q0-91 34.08-169.99 34.09-78.98 92.52-137.41 58.43-58.43 137.41-92.52Q389-914 480-914q91 0 169.99 34.08 78.98 34.09 137.41 92.52 58.43 58.43 92.52 137.41Q914-571 914-480q0 91-34.08 169.99-34.09 78.98-92.52 137.41-58.43 58.43-137.41 92.52Q571-46 480-46Zm0-126q130 0 219-89t89-219q0-130-89-219t-219-89q-130 0-219 89t-89 219q0 130 89 219t219 89Zm0-308Z"/></svg>

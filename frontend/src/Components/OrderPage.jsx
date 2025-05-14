@@ -1,6 +1,5 @@
 import { useState,useContext } from "react";
 import { CartContext } from "../CartContext";
-import { FoodList } from "../assets/MenuList";
 import { useNavigate } from "react-router";
 
 export function OrderPage() {
@@ -21,16 +20,13 @@ export function OrderPage() {
             </div>
                 {
                     cart.map((item,index) => {
-                        let i= FoodList.findIndex((food) => food.id === item.id);
-                        total+=FoodList[i].price*item.quantity;
-                        console.log(i);
-                        if(!i) return null;
+                        total+=item.value*item.quantity;
                         return <OrderedFood
                             key={item.id}
-                            name={FoodList[i].name}
-                            price={FoodList[i].price}
+                            name={item.name}
+                            price={item.value}
                             quantity={item.quantity}
-                            image={FoodList[i].image}
+                            image={item.image}
                             index={index}
                         />
                     }
@@ -45,7 +41,7 @@ export function OrderPage() {
     )
 
 function OrderedFood({name,price,quantity,image,index}){
-    const {RemoveAt} = useContext(CartContext);
+    const {RemoveAt,FoodList} = useContext(CartContext);
     return (
     <div className="grid grid-cols-6 font-[outfit] text-center text-lg border-b-2 border-gray-300 py-2">
                 <img className="h-10 place-self-center rounded-lg" src={image} />
@@ -59,7 +55,8 @@ function OrderedFood({name,price,quantity,image,index}){
                     
                     RemoveAt(index);
                 }}
-                ><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg></button>
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg></button>
             </div>
     )
 }
