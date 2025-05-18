@@ -40,28 +40,27 @@ const PresentInCart=(id)=>{
     return index==-1?0:cart[index].quantity;
 }
 
-
-
-const AddAdmin=(id)=>{
-    const found= adminList.findIndex((ix)=> ix==id);
-    if(found== -1)
-    {
-        setList(prev=>[...prev,id]);
-    }
+const AddAdmin = (id) => {
+    setList(prev => {
+        if (prev.includes(id)) return prev;
+        return [...prev, id];
+    });
 }
 
 
 //List of Orders is here with syntax
 const [Orders,SetOrders]=useState([{
+    AdminID:1,
     name:"Bharosa",
     amount:420,
     quantity:2,
-    status:"Pata nhi"
+    status:"Pata nhi",
+    time:"Kabhi toh aayega",
+    userID:1
 }]);
 
-const AddOrder=(item)=>{
-
-    SetOrders(prev=>[...prev,...item])
+const AddOrder=(items)=>{
+    SetOrders(prev=>[...prev,...items])
 }
 const ClearCart=()=>{
     setCart([]);

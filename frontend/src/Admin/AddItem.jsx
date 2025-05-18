@@ -31,7 +31,7 @@ export function AddItem({setter}) {
             <form className="flex flex-col mt-4">
                 <div className="grid grid-cols-2">
                 <input type="text" placeholder="Name" ref={name} className="border border-gray-300 rounded p-2 m-2" />
-                <DropDown title={`${category }`+ <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-360 280-560h400L480-360Z"/></svg> }>
+                <DropDown title={<>category<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-360 280-560h400L480-360Z"/></svg></> }>
                     {options.map((item,index)=>{console.log(item); return (<button type="button" key={index} onClick={()=>{setcategory(item)}} className="Central_Default m-1 bg-white w-full inset-shadow-slate-500/40 hover:inset-shadow-slate-700/70 inset-shadow-xs ">{item}</button>)})} 
                 </DropDown>
                 <input type="text" placeholder="Price" ref={price} className="border border-gray-300 rounded p-2 m-2" />

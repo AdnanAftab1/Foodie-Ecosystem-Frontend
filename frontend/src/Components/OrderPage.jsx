@@ -3,13 +3,14 @@ import { CartContext } from "../CartContext";
 import { useNavigate } from "react-router";
 
 export function OrderPage() {
-    const {AddAdmin,cart} = useContext(CartContext);
+    const {adminList,AddAdmin,cart} = useContext(CartContext);
     const navigate=useNavigate();
-    console.log("cart");
-    console.log(cart);
     cart.forEach(element => {
+        console.log(element.AdminID )
         AddAdmin(element.AdminID);
     });
+     console.log(adminList);
+
     let total=0;
     return (
         <>
@@ -66,9 +67,7 @@ function OrderedFood({name,price,quantity,image,index}){
 }
 
 export function CartTotal({total,Button}){
-    const {adminList,setTotal,cart} = useContext(CartContext);
-
-    console.log(adminList);
+    const {adminList,setTotal} = useContext(CartContext);
     setTotal(total);
     return (
         <div className=" inline-flex flex-col w-full max-w-96 h-min font-[outfit] shadow-lg rounded-lg p-4">
