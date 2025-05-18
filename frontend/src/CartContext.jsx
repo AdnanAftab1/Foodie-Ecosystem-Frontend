@@ -79,7 +79,14 @@ const AddItem=(item)=>{
 //Category Create,Add,View All
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart,RemoveAt,total, setTotal,PresentInCart,ClearCart ,Orders,AddOrder,FoodList,setMenu,SetOrders,adminList,AddAdmin}}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart,
+        RemoveAt,
+        total, setTotal,
+        PresentInCart,ClearCart ,
+        Orders,AddOrder,
+        FoodList,setMenu,
+        SetOrders,
+        adminList,AddAdmin}}>
             {children}
         </CartContext.Provider>
     );

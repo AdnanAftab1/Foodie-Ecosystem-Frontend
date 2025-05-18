@@ -52,7 +52,8 @@ export function AddItem({setter}) {
 
 export function DropDown({title,children}) {
     
-    return (<div className="dropdown mt-2 w-full">
+    return (
+    <div className="dropdown mt-2 w-full">
   <button type="button" className="dropbtn w-full  bg-neutral-100 p-2  rounded flex flex-row items-center justify-center">{title}</button>
   <div className="dropdown-content m-2 mt-0 w-full bg-white rounded p-2 shadow-sm ml-0">
     {children}
