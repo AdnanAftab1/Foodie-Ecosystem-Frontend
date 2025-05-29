@@ -1,4 +1,4 @@
-import { useContext,useRef, useState } from "react"
+import {useContext,useRef, useState } from "react"
 import { CartContext } from "../CartContext"
 
 
@@ -9,21 +9,14 @@ export function AddItem({setter}) {
     const rating=useRef();
     const image=useRef();
     const Description=useRef();
-    const {setMenu}=useContext(CartContext);
+    const {options,addItem}=useContext(CartContext);
+    console.log("option",options)
+    const newOptions=[...options.slice(1), {category_name:"others"}];
+    console.log("new option",newOptions)
+
     const [category,setcategory]=useState("Category")
 
-       let options = [
-  "biryani",
-  "burger",
-  "butter-chicken",
-  "dessert", 
-  "dosa",
-  "idly", 
-  "pasta",
-  "pizza", 
-  "rice",
-  "samosa","others"
-];
+      
     
     return (
         <div className="flex flex-col ">
@@ -31,16 +24,18 @@ export function AddItem({setter}) {
             <form className="flex flex-col mt-4">
                 <div className="grid grid-cols-2">
                 <input type="text" placeholder="Name" ref={name} className="border border-gray-300 rounded p-2 m-2" />
-                <DropDown title={<>category<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-360 280-560h400L480-360Z"/></svg></> }>
-                    {options.map((item,index)=>{console.log(item); return (<button type="button" key={index} onClick={()=>{setcategory(item)}} className="Central_Default m-1 bg-white w-full inset-shadow-slate-500/40 hover:inset-shadow-slate-700/70 inset-shadow-xs ">{item}</button>)})} 
+                <DropDown title={<>{category}<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-360 280-560h400L480-360Z"/></svg></> }>
+                    {newOptions.map((item,index)=>{return (<button type="button" key={index} onClick={()=>{console.log(item.category_name);setcategory(item.category_name)}} className="Central_Default m-1 bg-white w-full inset-shadow-slate-500/40 hover:inset-shadow-slate-700/70 inset-shadow-xs ">{item.category_name}</button>)})}
                 </DropDown>
                 <input type="text" placeholder="Price" ref={price} className="border border-gray-300 rounded p-2 m-2" />
                 <input type="text" placeholder="Rating" ref={rating} className="border border-gray-300 rounded p-2 m-2" />
                 </div>
                 <input type="text" placeholder="Description" ref={Description} className="border border-gray-300 rounded p-2 m-2" />
+                <input type="text" placeholder="New Category" ref={image} className={`border border-gray-300 rounded p-2 m-2 `+ (category==="others"?``:`hidden`)} />
                 <input type="text" placeholder="Image URL" ref={image} className="border border-gray-300 rounded p-2 m-2" />
                 <button type="button" className="border-1 rounded" onClick={()=>{
-                    setMenu(prev=>[...prev,{name:name.current.value,ratings:rating.current.value,price:Number(price.current.value),category:category,description:Description.current.value,image:image.current.value,id:prev.length+1}])
+                    const objectItem={item_name:name.current.value,rating:rating.current.value,cost:Number(price.current.value),category_id:category,item_description:Description.current.value,image_url:image.current.value}
+                    addItem(objectItem);
                     setter();
                      }}>Add Item</button>
             </form>
