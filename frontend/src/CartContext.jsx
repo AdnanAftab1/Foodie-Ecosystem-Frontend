@@ -1,19 +1,30 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useEffect, useRef, } from "react";
 import {useState} from "react";
-import {FoodList1} from "./assets/MenuList"
 import axios from "axios";
-import {commonjs} from "globals";
-export const CartContext = createContext(null);
+import {useNavigate} from "react-router";
+import cookies from "js-cookie";
+
+export const   CartContext = createContext(null);
 const LinkBasis='http://13.234.231.241:8000';
 export const CartProvider = ({ children }) => {
     const [userID,setUserID]=useState("");
     const [accessToken,setaccessToken]=useState("");
-    const [token_type,settoken_type]=useState("");
-    const [ver,setver]=useState(false);
+    const token_type="bearer";
+    const [ver,setver]=useState(true);
     const [alert,setAlert]=useState(true);
+    const [quan,setQuan]=useState(0);
     const alertMessage=useRef("");
-    
+
+    useEffect(()=>{
+        const token=cookies.get("accessToken");
+        if(token){
+            setaccessToken(token);
+        }else{
+            setver(false);
+        }
+    })
+
     function Alert(alertMess){
         alertMessage.current=alertMess;
         setAlert(prev=>!prev);
@@ -21,8 +32,6 @@ export const CartProvider = ({ children }) => {
             setAlert(prev => !prev);
         }, 1000);
     }
-
-
 
     const SignUpFunc=(name,email,password)=>{
         const user_type=location.pathname.substring(1)==="admin"?"admin":"user";
@@ -46,13 +55,12 @@ export const CartProvider = ({ children }) => {
       "Content-Type": "application/x-www-form-urlencoded"
     }
   }
-        ).then((response)=>{console.log(response.data);settoken_type(response.data.token_type);setaccessToken(response.data.access_token);setver(!ver)}).catch(()=>{Alert("Something went wrong")});
+        ).then((response)=>{console.log(response.data);cookies.set("accessToken",accessToken); setaccessToken(response.data.access_token);setver(!ver)}).catch(()=>{Alert("Something went wrong")});
     }
 
 
     const [total, setTotal] = useState(0);
     const [adminList,setList]=useState([]);
-
 
     const [options,setOptions]=useState([
 
@@ -120,9 +128,23 @@ export const CartProvider = ({ children }) => {
     setOptions([...options,item])
 }
 
+    const [cart, setCart] = useState({});
+    
+
+    const activeCart=()=>{
+        axios.get(`http://13.234.231.241:8000/cart/viewCart`,{
+            headers: {
+                Authorization: `${token_type} ${accessToken}`,
+                Accept: "application/json"
+            }
+        }).then((response)=>{console.log("Cart",response.data);
+            setUserID(response.data.user_id);setCart(response.data)}).catch((err)=> {
+            Alert("Can't View");
+            console.log(err);
+        });
+    }
 
 
-    const [cart, setCart] = useState([]);
 
 
     const addToCart = (id) => {
@@ -131,7 +153,12 @@ export const CartProvider = ({ children }) => {
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
             }
-        }).catch((err)=> {
+        }).then(()=>{setMenu(prev=>prev.map((item)=>{if(item.item_id==id){
+            return {...item,product_count:item.product_count+1}}
+            else{
+                return item;
+            }
+        }));setQuan(prev=>prev+1);}).catch((err)=> {
             Alert("Can't Add");
             console.log(err);
         });
@@ -139,32 +166,44 @@ export const CartProvider = ({ children }) => {
 }
 
     const removeFromCart = (id) => {
+        
         axios.delete(`http://13.234.231.241:8000/cart/removeItemFromCart/${id}`,{
             headers: {
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
             }
-        }).catch((err)=> {
+        }).then(()=>{setMenu(prev=>prev.map((item)=>{if(item.item_id==id){
+            return {...item,quantity:item.product_count>0?item.product_count-1:0}}
+            else{
+                return item
+            }
+        }));setQuan(prev=>prev-1)}).catch((err)=> {
             Alert("Can't Remove");
             console.log(err);
         })
     }
 
 
-    const RemoveAt= (index) => {
-        setCart(prev => [...prev].filter((item,index1)=>{return index!=index1}));
+    const RemoveAt= (id) => {
+      axios.delete(`http://13.234.231.241:8000/cart/removeItemsFromCart/${id}`,{
+            headers: {
+                Authorization: `${token_type} ${accessToken}`,
+                Accept: "application/json"
+            }
+        }).then(()=>{setMenu(prev=>prev.map((item)=>{if(item.id==id){
+            return {...item,product_count:0}}
+            else{
+                return item;
+            }
+        }));console.log(FoodList);activeCart()}).catch((err)=> {
+            Alert("Can't Remove Entirely");
+            console.log(err);
+        })
     }
     // const PresentInCart=(id)=>{
     //     const index=cart.findIndex((i) => i.id === id);
     //     return index==-1?0:cart[index].quantity;
-    // }
-
-const AddAdmin = (id) => {
-    setList(prev => {
-        if (prev.includes(id)) return prev;
-        return [...prev, id];
-    });
-}
+    // }http://13.234.231.241:8000/cart/removeItemsFromCart/682f935ceeecdd503e3d7814
 
 const RemoveItem=(item_id)=>{
         setMenu(FoodList.filter((item)=>{return item.id!==item_id}))
@@ -178,14 +217,73 @@ const RemoveItem=(item_id)=>{
 
 //List of Orders is here with syntax
 const [Orders,SetOrders]=useState([]);
+    const LoadOrders=() => {
+        if(accessToken && token_type){
+            axios.get(`http://13.234.231.241:8000/order/viewOrdersByUser`,{
+                headers:{
+                    Authorization:`${token_type} ${accessToken}`,
+                    Accept:"application/json"
+                }
+            }).then((response)=>{SetOrders(response.data);console.log("Orders Loaded");console.log(Orders)}).catch(()=>{Alert("Couldn't Load Orders")})
 
-const AddOrder=(items)=>{
-    SetOrders(prev=>[...prev,...items])
-}
-const ClearCart=()=>{
+        }
+       };
+
+    const LoadOrdersAsAdmin=() => {
+        if(accessToken && token_type){
+            axios.get(`http://13.234.231.241:8000/order/viewOrdersByAdmin`,{
+                headers:{
+                    Authorization:`${token_type} ${accessToken}`,
+                    Accept:"application/json"
+                }
+            }).then((response)=>{SetOrders(response.data);console.log("Orders Loaded");console.log(Orders)}).catch(()=>{Alert("Couldn't Load Orders")})
+
+        }
+    };
+
+const ClearCart=async ()=>{
+    
+
     setCart([]);
     setTotal(0);
+
 }
+
+const PostAddress=async (address)=>{
+    const data=address;
+    console.log({address})
+
+    await axios.post("http://13.234.231.241:8000/deliveryInfo/addDeliveryInfo", data,{
+            headers:{
+                Authorization: `${token_type} ${accessToken}`,
+                Accept: "application/json"
+            }
+    }).then((response)=>{setUserID(response.data.user_id);console.log("Address Posted Online");placeOrder()}).catch((err)=>{console.log(err);Alert("Couldn't Post Address")})
+}
+
+const placeOrder=async ()=>{
+
+    axios.post("http://13.234.231.241:8000/order/addOrder",{},{
+            headers:{
+                Authorization: `${token_type} ${accessToken}`,
+                Accept: "application/json"
+            }
+        }).then((response)=>{console.log(response.data.message)}).catch(()=>{Alert("Couldn't Place Order")})
+
+}
+
+const ChangeStatus=(status,order_id)=>{
+    axios.put(`http://13.234.231.241:8000/order/updateStatus/${order_id}`,{},{
+        params:{
+            status:status
+        },
+        headers:{
+            Authorization: `${token_type} ${accessToken}`,
+            Accept: "application/json"
+        },
+    }).then(()=>{Alert("Status Updated")}).catch(()=>{Alert("Status can't update")})
+}
+
 
 //List of All Items is here....
 const [FoodList,setMenu]=useState([]);
@@ -210,24 +308,45 @@ useEffect(() => {
     }
 }, [accessToken, token_type]);
 
-const addItem=(item)=>{
-    axios.post(`http://13.234.231.241:8000/item/addItem`,{
+const addItem=async (item,category_nameD)=>{
+    let category_id="";
+    console.log({
+        Authorization: `${token_type} ${accessToken}`,
+        Accept: "application/json"
+    })
+    if(item.category_id==="others"){
+        await axios.post("http://13.234.231.241:8000/category/createCategory",{
+            category_name:category_nameD,
+            category_description:item.item_description,
+            image_url:item.image_url,
+        },{
+            headers: {
+                Authorization: `${token_type} ${accessToken}`,
+                Accept: "application/json"
+            }
+        }
+    ).then((response)=>{category_id=response.data.id})
+    }else{
+        category_id=(options.find((item1)=>item1.category_name===item.category_id)).id;
+    }
+    console.log("Data For adding:",item,category_id);
+    await axios.post(`http://13.234.231.241:8000/item/addItem`,{
         item_name: item.item_name,
         rating: item.rating,
         cost: item.cost,
-        category_id: item.category_id,
+        category_id: category_id,
         item_description: item.item_description,
-        image_url: item.image_url
+        image_url: item.image_url,
+        user_id:userID,
     }, {
         headers: {
             Authorization: `${token_type} ${accessToken}`,
             Accept: "application/json"
         }
-    }).then(()=>setMenu([...FoodList,item]))
+    })
 }
 
 const LogOutFunc=()=>{
-    settoken_type("");
     setaccessToken("");
     setver(false);
 }
@@ -236,17 +355,24 @@ const LogOutFunc=()=>{
 
 //Category Create,Add,View All
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart,
-        RemoveAt,
-        total, setTotal,ClearCart ,
-        Orders,AddOrder,
-        FoodList,setMenu,RemoveItem,addItem,
-        SetOrders,
-        adminList,AddAdmin,
-        options,addOptions,
-        ver,
-        alert,alertMessage,
-        SignUpFunc,LoginFunc, LogOutFunc}}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, RemoveAt,
+
+            total, setTotal,ClearCart,
+
+            Orders,PostAddress,LoadOrders,LoadOrdersAsAdmin,ChangeStatus,
+
+
+            FoodList,setMenu,RemoveItem,addItem,
+
+            adminList,
+
+            options,addOptions,
+
+            ver,accessToken,
+
+            alert,alertMessage,quan,setQuan,activeCart,
+
+            SignUpFunc,LoginFunc, LogOutFunc}}>
             {children}
         </CartContext.Provider>
     );

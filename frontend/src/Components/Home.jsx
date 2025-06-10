@@ -1,16 +1,17 @@
-import React, {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import "../App.css";
 import { CartContext } from "../CartContext";
 
 export function Home() {
     const {LogOutFunc}=useContext(CartContext);
-    useEffect(() => {
-        LogOutFunc();
-    }, []);
+    // useEffect(() => {
+    //     LogOutFunc();
+    // }, []);
     return (
         <>
         <MainFrame/>    
         <Menu/>
+         <AboutUs/>
         </>
     )
 }
@@ -34,9 +35,8 @@ export function MainFrame() {
     );
   }
 
-  export function Menu() {
+export function Menu() {
     const {options} = useContext(CartContext);
-    console.log("Categories",options);
 
 
       const [currentIndex, setCurrentIndex] = useState(0);
@@ -69,19 +69,21 @@ export function MainFrame() {
 
 export function AboutUs() {
     return (
-        <div className="Central_Default">
-            <div className="relative Central_Default w-full">
+            <footer className="relative Central_Default w-screen overflow-visible bottom-0">
                 <img
-                    className="object-cover w-full h-full rounded-2xl"
-                    src="https://images.squarespace-cdn.com/content/v1/56a2785c69a91af45e06a188/1581442353249-5YKSPLFWQQHQCA055MHY/Restaurant-Food-Pics.png"
+                    className="object-cover w-screen h-full"
+                    src="http://lekvilla.com/wp-content/uploads/2015/07/BACKGROUND-FOOTER-1.jpg"
                     alt="Food"
                 />
-                <div className="absolute left-10 text-center text-white font-[outfit]">
-                    <div className="text-2xl ">Order your favourite food at</div>
-                    <div className="text-4xl font-extrabold">Foodie.</div>
+                <div className="absolute w-full grid grid-cols-2 text-center text-white font-[outfit]  font-semibold">
+                    <div>Contact Us</div>
+                    <div>Sponsors</div>
+                    <div>Mobile App</div>
+                    <div>Founders</div>
+                    <div>Our Achievements</div>
+                    <p>Our Team</p>
                 </div>
-            </div>
-        </div>
+            </footer>
     );
 }
 
@@ -89,7 +91,8 @@ export function AboutUs() {
 //The Array must have Category , Name, Image, Price, Description, Rating, Reviews,ID
 function MenuBar({curr,fdItems}) {
     const {FoodList}=useContext(CartContext);
-    console.log("Menu:",FoodList);
+    console.log("FDitems",fdItems);
+    console.log("FoodList",FoodList);
 
     if (curr != 0) {
     return (
@@ -99,21 +102,24 @@ function MenuBar({curr,fdItems}) {
                 {/*
                 Changes required her later after DB corrections
 
-
                 */
-                    FoodList.filter((item) => item.item_name === fdItems[curr].category_name).map((item) => (
-                        <Card_Generator
-                            name={item.item_name}
-                            image={item.image_url}
-                            value={item.cost}
-                            description={item.item_description}
-                            id={item.id}
-                            ratings={item.rating}
-                            quantity={item.product_count}
-                            AdminID={item.AdminID}
-                            key={item.id}
-                        />
-                    ))
+                    FoodList.map((item) => {
+                        console.log(item.category_id," vs ",fdItems[curr].id)
+                            if (item.category_id === fdItems[curr].id) {
+                                return (<Card_Generator
+                                    name={item.item_name}
+                                    image={item.image_url}
+                                    value={item.cost}
+                                    description={item.item_description}
+                                    id={item.id}
+                                    ratings={item.rating}
+                                    quantity={item.product_count}
+                                    AdminID={item.AdminID}
+                                    key={item.id}
+                                />)
+                            }
+                        }
+                    )
                 }
             </div>
         </>
@@ -124,7 +130,7 @@ function MenuBar({curr,fdItems}) {
         <>
         <div className="text-2xl font-semibold">Top Rated</div>
             <div className="grid grid-cols-5 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 ">
-                {
+                {  
                     FoodList.map((item) => {if(item.rating>4) return <Card_Generator 
                         name={item.item_name} 
                         image={item.image_url} 
@@ -142,8 +148,11 @@ function MenuBar({curr,fdItems}) {
     }
 }
     function Card_Generator( {name,description, image, value ,id,ratings,AdminID,quantity}) {
-    const { addToCart ,removeFromCart} = useContext(CartContext);
+    const {addToCart ,removeFromCart,setQuan,} = useContext(CartContext);
     const [Squantity, setQuantity] = useState(quantity);
+    useEffect(()=>{
+        setQuan(prev=>prev+quantity);
+    },[]);
     return (
         <div className="Central_Default p-3  rounded-lg m-5 shadow-md hover:scale-105 transition-transform duration-300" style={{
         opacity: 0,
