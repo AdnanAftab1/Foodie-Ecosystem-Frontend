@@ -1,4 +1,4 @@
-import { useContext,useRef, useState } from "react"
+import {useContext,useRef, useState } from "react"
 import { CartContext } from "../CartContext"
 
 
@@ -9,38 +9,70 @@ export function AddItem({setter}) {
     const rating=useRef();
     const image=useRef();
     const Description=useRef();
-    const {setMenu}=useContext(CartContext);
-    const [category,setcategory]=useState("Category")
+    const NewCategory=useRef();
+    const {options,addItem}=useContext(CartContext);
+    const newOptions=[{category_name:"others",id:""},...options.slice(1)];
 
-       let options = [
-  "biryani",
-  "burger",
-  "butter-chicken",
-  "dessert", 
-  "dosa",
-  "idly", 
-  "pasta",
-  "pizza", 
-  "rice",
-  "samosa","others"
-];
+    const [category,setcategory]=useState("others")
+
+      
     
     return (
-        <div className="flex flex-col ">
+        <div className="flex flex-col">
             <h1 className="text-3xl font-bold">Product Information</h1>
             <form className="flex flex-col mt-4">
                 <div className="grid grid-cols-2">
-                <input type="text" placeholder="Name" ref={name} className="border border-gray-300 rounded p-2 m-2" />
-                <DropDown title={<>category<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-360 280-560h400L480-360Z"/></svg></> }>
-                    {options.map((item,index)=>{console.log(item); return (<button type="button" key={index} onClick={()=>{setcategory(item)}} className="Central_Default m-1 bg-white w-full inset-shadow-slate-500/40 hover:inset-shadow-slate-700/70 inset-shadow-xs ">{item}</button>)})} 
-                </DropDown>
-                <input type="text" placeholder="Price" ref={price} className="border border-gray-300 rounded p-2 m-2" />
-                <input type="text" placeholder="Rating" ref={rating} className="border border-gray-300 rounded p-2 m-2" />
+                    <input type="text" placeholder="Name" ref={name}
+                           className="border border-gray-300 rounded p-2 m-2"/>
+                    {/*<DropDown title={<>{category}*/}
+                    {/*    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"*/}
+                    {/*         fill="#434343">*/}
+                    {/*        <path d="M480-360 280-560h400L480-360Z"/>*/}
+                    {/*    </svg>*/}
+                    {/*</>}>*/}
+                    {/*    {newOptions.map((item, index) => {*/}
+                    {/*        return (<button type="button" key={index} onClick={() => {*/}
+                    {/*            console.log(item.category_name);*/}
+                    {/*            setcategory(item.category_name)*/}
+                    {/*        }}*/}
+                    {/*                        className="Central_Default m-1 bg-white w-full inset-shadow-slate-500/40 hover:inset-shadow-slate-700/70 inset-shadow-xs ">{item.category_name}</button>)*/}
+                    {/*    })}*/}
+                    {/*</DropDown>*/}
+                    <select name="category" value={category} className="dropdown mt-2 w-full h-fit p-2 bg-gray-100 border-1 border-gray-300 rounded-sm"
+                            id="category">
+                        {
+                            newOptions.map((item) => {
+                                return (<option value={item.category_name} key={item.id} onClick={() => {
+                                    setcategory(item.category_name)
+                                }} className="m-1">{item.category_name}</option>)
+                            })
+                        }
+                    </select>
+                    {/*<select name="cars" id="cars">*/}
+                    {/*    <option value="volvo">Volvo</option>*/}
+                    {/*    <option value="saab">Saab</option>*/}
+                    {/*    <option value="opel">Opel</option>*/}
+                    {/*    <option value="audi">Audi</option>*/}
+                    {/*</select>*/}
+                    <input type="text" placeholder="Price" ref={price}
+                           className="border border-gray-300 rounded p-2 m-2"/>
+                    <input type="text" placeholder="Rating" ref={rating}
+                           className="border border-gray-300 rounded p-2 m-2"/>
                 </div>
-                <input type="text" placeholder="Description" ref={Description} className="border border-gray-300 rounded p-2 m-2" />
+                <input type="text" placeholder="Description" ref={Description}
+                       className="border border-gray-300 rounded p-2 m-2"/>
+                <input type="text" placeholder="New Category" ref={NewCategory} className={`border border-gray-300 rounded p-2 m-2 `+ (category==="others"?``:`hidden`)} />
                 <input type="text" placeholder="Image URL" ref={image} className="border border-gray-300 rounded p-2 m-2" />
                 <button type="button" className="border-1 rounded" onClick={()=>{
-                    setMenu(prev=>[...prev,{name:name.current.value,ratings:rating.current.value,price:Number(price.current.value),category:category,description:Description.current.value,image:image.current.value,id:prev.length+1}])
+                    const objectItem={
+                        item_name:name.current.value,
+                        rating:rating.current.value,
+                        cost:Number(price.current.value),
+                        category_id:category,
+                        item_description:Description.current.value,
+                        image_url:image.current.value
+                    }
+                    addItem(objectItem,NewCategory.current.value);
                     setter();
                      }}>Add Item</button>
             </form>
