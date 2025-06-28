@@ -3,10 +3,15 @@ import { createContext, useEffect, useRef, } from "react";
 import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router";
+import {loadStripe} from "@stripe/stripe-js"
 import cookies from "js-cookie";
 
 export const   CartContext = createContext(null);
 const LinkBasis='http://13.234.231.241:8000';
+
+
+
+
 export const CartProvider = ({ children }) => {
     const [userID,setUserID]=useState("");
     const [accessToken,setaccessToken]=useState("");
@@ -16,14 +21,18 @@ export const CartProvider = ({ children }) => {
     const [quan,setQuan]=useState(0);
     const alertMessage=useRef("");
 
-    useEffect(()=>{
-        const token=cookies.get("accessToken");
+    function LoadUP(){
+            const token=cookies.get("accessToken");
         if(token){
             setaccessToken(token);
         }else{
             setver(false);
         }
-    })
+    }
+
+    useEffect(()=>{
+       LoadUP();
+    },[])
 
     function Alert(alertMess){
         alertMessage.current=alertMess;
@@ -55,7 +64,7 @@ export const CartProvider = ({ children }) => {
       "Content-Type": "application/x-www-form-urlencoded"
     }
   }
-        ).then((response)=>{console.log(response.data);cookies.set("accessToken",accessToken); setaccessToken(response.data.access_token);setver(!ver)}).catch(()=>{Alert("Something went wrong")});
+        ).then((response)=>{console.log(response.data);cookies.set("accessToken",response.data.access_token); setaccessToken(response.data.access_token);setver(!ver)}).catch(()=>{Alert("Something went wrong");});
     }
 
 
@@ -111,7 +120,6 @@ export const CartProvider = ({ children }) => {
                 }
             })
                 .then((response) => {
-                    console.log("Data:", response.data);
                     setOptions([{
                         id:"0",
                         category_name: "Top Rated",
@@ -140,7 +148,6 @@ export const CartProvider = ({ children }) => {
         }).then((response)=>{console.log("Cart",response.data);
             setUserID(response.data.user_id);setCart(response.data)}).catch((err)=> {
             Alert("Can't View");
-            console.log(err);
         });
     }
 
@@ -160,7 +167,6 @@ export const CartProvider = ({ children }) => {
             }
         }));setQuan(prev=>prev+1);}).catch((err)=> {
             Alert("Can't Add");
-            console.log(err);
         });
 
 }
@@ -179,7 +185,6 @@ export const CartProvider = ({ children }) => {
             }
         }));setQuan(prev=>prev-1)}).catch((err)=> {
             Alert("Can't Remove");
-            console.log(err);
         })
     }
 
@@ -195,9 +200,8 @@ export const CartProvider = ({ children }) => {
             else{
                 return item;
             }
-        }));console.log(FoodList);activeCart()}).catch((err)=> {
+        }));activeCart()}).catch((err)=> {
             Alert("Can't Remove Entirely");
-            console.log(err);
         })
     }
     // const PresentInCart=(id)=>{
@@ -217,16 +221,18 @@ const RemoveItem=(item_id)=>{
 
 //List of Orders is here with syntax
 const [Orders,SetOrders]=useState([]);
-    const LoadOrders=() => {
+
+    const LoadOrders=async () => {
+        console.log("Orders Loading:",accessToken)
         if(accessToken && token_type){
-            axios.get(`http://13.234.231.241:8000/order/viewOrdersByUser`,{
+           await axios.get(`http://13.234.231.241:8000/order/viewOrdersByUser`,{
                 headers:{
                     Authorization:`${token_type} ${accessToken}`,
                     Accept:"application/json"
                 }
             }).then((response)=>{SetOrders(response.data);console.log("Orders Loaded");console.log(Orders)}).catch(()=>{Alert("Couldn't Load Orders")})
 
-        }
+        } 
        };
 
     const LoadOrdersAsAdmin=() => {
@@ -258,7 +264,7 @@ const PostAddress=async (address)=>{
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
             }
-    }).then((response)=>{setUserID(response.data.user_id);console.log("Address Posted Online");placeOrder()}).catch((err)=>{console.log(err);Alert("Couldn't Post Address")})
+    }).then((response)=>{setUserID(response.data.user_id);console.log("Address Posted Online")}).catch((err)=>{console.log(err);Alert("Couldn't Post Address")})
 }
 
 const placeOrder=async ()=>{
@@ -268,7 +274,7 @@ const placeOrder=async ()=>{
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
             }
-        }).then((response)=>{console.log(response.data.message)}).catch(()=>{Alert("Couldn't Place Order")})
+        }).then((response)=>{console.log(response.data.message);setQuan(0)}).catch(()=>{Alert("Couldn't Place Order")})
 
 }
 
@@ -372,8 +378,11 @@ const LogOutFunc=()=>{
 
             alert,alertMessage,quan,setQuan,activeCart,
 
-            SignUpFunc,LoginFunc, LogOutFunc}}>
+            SignUpFunc,LoginFunc, LogOutFunc ,LoadUP
+            
+            }}>
             {children}
         </CartContext.Provider>
     );
 }
+

@@ -2,11 +2,13 @@ import { useContext,useEffect  } from "react";
 import { CartContext } from "../CartContext";
 
 export function TrackPage(){
-    const {Orders,LoadOrders} =useContext(CartContext);
+    const {Orders,LoadOrders,accessToken} =useContext(CartContext);
     useEffect(() => {
-        console.log("Orders Loaded")
-        LoadOrders();
-    },[]);
+  if (accessToken) {
+    LoadOrders();
+  }
+}, [accessToken]);
+
 
     return (<>
             {

@@ -3,6 +3,7 @@ import { useContext, useRef } from "react";
 import { CartContext } from "../CartContext";
 import {useNavigate} from "react-router";
 
+
 export function CheckoutPage() {
     const { total,cart } = useContext(CartContext);
     let adminL=0;
@@ -41,7 +42,7 @@ function OrderDone({ refs }) {
                     street: refs.Street.current?.value || "",
                     city: refs.City.current?.value || "",
                 };
-                PostAddress(deliveryInfo).then(()=>{navigate("/trackOrders")});
+                PostAddress(deliveryInfo).then(()=>{navigate("/pay")});
             }}
         >
             Submit
