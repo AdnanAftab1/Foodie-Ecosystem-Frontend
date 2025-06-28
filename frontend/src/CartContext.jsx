@@ -1,6 +1,10 @@
-import { createContext, use } from "react";
-import { useState } from "react";
-import {FoodList1} from "./assets/MenuList"
+/* eslint-disable no-unused-vars */
+import { createContext, useEffect, useRef, } from "react";
+import {useState} from "react";
+import axios from "axios";
+import {useNavigate} from "react-router";
+import {loadStripe} from "@stripe/stripe-js"
+import cookies from "js-cookie";
 
 export const   CartContext = createContext(null);
 const LinkBasis='http://13.234.231.241:8000';
