@@ -27,5 +27,31 @@
     "chunk-5WQJO2FO": {
       "file": "chunk-5WQJO2FO.js"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/cart/:match*",
+      "destination": "http://13.234.231.241:8000/cart/:match*"
+    },
+    {
+      "source": "/user/:match*",
+      "destination": "http://13.234.231.241:8000/user/:match*"
+    },
+    {
+      "source": "/category/:match*",
+      "destination": "http://13.234.231.241:8000/category/:match*"
+    },
+    {
+      "source": "/item/:match*",
+      "destination": "http://13.234.231.241:8000/item/:match*"
+    },
+    {
+      "source": "/order/:match*",
+      "destination": "http://13.234.231.241:8000/order/:match*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ]
 }
