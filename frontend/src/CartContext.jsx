@@ -379,8 +379,7 @@ const LogOutFunc=()=>{
             alert,alertMessage,quan,setQuan,activeCart,
 
             SignUpFunc,LoginFunc, LogOutFunc ,LoadUP
-            
-            }}>
+                        }}>
             {children}
         </CartContext.Provider>
     );
