@@ -374,7 +374,7 @@ const LogOutFunc=()=>{
 
             options,addOptions,
 
-            ver,accessToken,
+            ver,accessToken,token_type,
 
             alert,alertMessage,quan,setQuan,activeCart,
 

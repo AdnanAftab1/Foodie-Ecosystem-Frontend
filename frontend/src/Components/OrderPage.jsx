@@ -86,11 +86,11 @@ export function CartTotal({total,adminL,Button}){
                 </div>
                 <div className="flex flex-row justify-between w-full text-sm font-extralight">
                     <p >Delivery Charges </p>
-                    <p >${5*adminL}</p> 
+                    <p >${0*adminL}</p> 
                 </div>
                 <div className="flex flex-row justify-between w-full text-lg font-semibold">
                     <p >Total</p>
-                    <p >${(Math.round(total * 100) / 100+5*adminL)}</p>
+                    <p >${(Math.round(total * 100) / 100+0*adminL)}</p>
                 </div>
                 {Button()}
             </div>

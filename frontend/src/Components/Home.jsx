@@ -11,7 +11,6 @@ export function Home() {
         <>
         <MainFrame/>    
         <Menu/>
-         <AboutUs/>
         </>
     )
 }
@@ -67,25 +66,7 @@ export function Menu() {
   
 }
 
-export function AboutUs() {
-    return (
-            <footer className="relative Central_Default w-screen overflow-visible bottom-0">
-                <img
-                    className="object-cover w-screen h-full"
-                    src="http://lekvilla.com/wp-content/uploads/2015/07/BACKGROUND-FOOTER-1.jpg"
-                    alt="Food"
-                />
-                <div className="absolute w-full grid grid-cols-2 text-center text-white font-[outfit]  font-semibold">
-                    <div>Contact Us</div>
-                    <div>Sponsors</div>
-                    <div>Mobile App</div>
-                    <div>Founders</div>
-                    <div>Our Achievements</div>
-                    <p>Our Team</p>
-                </div>
-            </footer>
-    );
-}
+
 
 //Create a full array of products and then use the map function to create a card for each product
 //The Array must have Category , Name, Image, Price, Description, Rating, Reviews,ID

@@ -18,7 +18,7 @@ const stripe = require('stripe')(STRIPE_SECRET_KEY, {
   }
 });
 
-app.use(cors())
+app.use(cors());
 app.use(express.static(STATIC_DIR));
 app.use(
   express.json({
