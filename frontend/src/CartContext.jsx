@@ -7,7 +7,7 @@ import {loadStripe} from "@stripe/stripe-js"
 import cookies from "js-cookie";
 
 export const   CartContext = createContext(null);
-const LinkBasis='http://13.234.231.241:8000';
+const LinkBasis='https://foodie.backendpro.icu';
 
 
 
@@ -59,7 +59,7 @@ export const CartProvider = ({ children }) => {
         newForm.append("username",username);
         newForm.append("password",password);
         newForm.append("grant_type","password");
-        axios.post(`http://13.234.231.241:8000/user/login`,newForm,{
+        axios.post(`${LinkBasis}/user/login`,newForm,{
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -113,7 +113,7 @@ export const CartProvider = ({ children }) => {
 
     useEffect( ()=>{
         if(accessToken && token_type){
-            axios.get(`	http://13.234.231.241:8000/category/viewAllCategories`,{
+            axios.get(`${LinkBasis}/category/viewAllCategories`,{
                 headers: {
                     Authorization: `${token_type} ${accessToken}`,
                     Accept: "application/json"
@@ -140,7 +140,7 @@ export const CartProvider = ({ children }) => {
     
 
     const activeCart=()=>{
-        axios.get(`http://13.234.231.241:8000/cart/viewCart`,{
+        axios.get(`${LinkBasis}/cart/viewCart`,{
             headers: {
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
@@ -155,7 +155,7 @@ export const CartProvider = ({ children }) => {
 
 
     const addToCart = (id) => {
-        axios.post(`http://13.234.231.241:8000/cart/addToCart/${id}`,{},{
+        axios.post(`${LinkBasis}/cart/addToCart/${id}`,{},{
             headers: {
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
@@ -173,7 +173,7 @@ export const CartProvider = ({ children }) => {
 
     const removeFromCart = (id) => {
         
-        axios.delete(`http://13.234.231.241:8000/cart/removeItemFromCart/${id}`,{
+        axios.delete(`${LinkBasis}/cart/removeItemFromCart/${id}`,{
             headers: {
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
@@ -190,7 +190,7 @@ export const CartProvider = ({ children }) => {
 
 
     const RemoveAt= (id) => {
-      axios.delete(`http://13.234.231.241:8000/cart/removeItemsFromCart/${id}`,{
+      axios.delete(`${LinkBasis}/cart/removeItemsFromCart/${id}`,{
             headers: {
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
@@ -207,11 +207,11 @@ export const CartProvider = ({ children }) => {
     // const PresentInCart=(id)=>{
     //     const index=cart.findIndex((i) => i.id === id);
     //     return index==-1?0:cart[index].quantity;
-    // }http://13.234.231.241:8000/cart/removeItemsFromCart/682f935ceeecdd503e3d7814
+    // }${LinkBasis}/cart/removeItemsFromCart/682f935ceeecdd503e3d7814
 
 const RemoveItem=(item_id)=>{
         setMenu(FoodList.filter((item)=>{return item.id!==item_id}))
-        axios.delete(`http://13.234.231.241:8000/item/deleteItem/${item_id}`,{
+        axios.delete(`${LinkBasis}/item/deleteItem/${item_id}`,{
             headers: {
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
@@ -225,7 +225,7 @@ const [Orders,SetOrders]=useState([]);
     const LoadOrders=async () => {
         console.log("Orders Loading:",accessToken)
         if(accessToken && token_type){
-           await axios.get(`http://13.234.231.241:8000/order/viewOrdersByUser`,{
+           await axios.get(`${LinkBasis}/order/viewOrdersByUser`,{
                 headers:{
                     Authorization:`${token_type} ${accessToken}`,
                     Accept:"application/json"
@@ -237,7 +237,7 @@ const [Orders,SetOrders]=useState([]);
 
     const LoadOrdersAsAdmin=() => {
         if(accessToken && token_type){
-            axios.get(`http://13.234.231.241:8000/order/viewOrdersByAdmin`,{
+            axios.get(`${LinkBasis}/order/viewOrdersByAdmin`,{
                 headers:{
                     Authorization:`${token_type} ${accessToken}`,
                     Accept:"application/json"
@@ -259,7 +259,7 @@ const PostAddress=async (address)=>{
     const data=address;
     console.log({address})
 
-    await axios.post("http://13.234.231.241:8000/deliveryInfo/addDeliveryInfo", data,{
+    await axios.post("${LinkBasis}/deliveryInfo/addDeliveryInfo", data,{
             headers:{
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
@@ -269,7 +269,7 @@ const PostAddress=async (address)=>{
 
 const placeOrder=async ()=>{
 
-    axios.post("http://13.234.231.241:8000/order/addOrder",{},{
+    axios.post("${LinkBasis}/order/addOrder",{},{
             headers:{
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
@@ -279,7 +279,7 @@ const placeOrder=async ()=>{
 }
 
 const ChangeStatus=(status,order_id)=>{
-    axios.put(`http://13.234.231.241:8000/order/updateStatus/${order_id}`,{},{
+    axios.put(`${LinkBasis}/order/updateStatus/${order_id}`,{},{
         params:{
             status:status
         },
@@ -298,7 +298,7 @@ useEffect(() => {
     if (accessToken && token_type) {
         console.log("Fetching items with token:", { accessToken, token_type });
 
-        axios.get(`	http://13.234.231.241:8000/item/viewAllItems`, {
+        axios.get(`	${LinkBasis}/item/viewAllItems`, {
             headers: {
                 Authorization: `${token_type} ${accessToken}`,
                 Accept: "application/json"
@@ -321,7 +321,7 @@ const addItem=async (item,category_nameD)=>{
         Accept: "application/json"
     })
     if(item.category_id==="others"){
-        await axios.post("http://13.234.231.241:8000/category/createCategory",{
+        await axios.post("${LinkBasis}/category/createCategory",{
             category_name:category_nameD,
             category_description:item.item_description,
             image_url:item.image_url,
@@ -336,7 +336,7 @@ const addItem=async (item,category_nameD)=>{
         category_id=(options.find((item1)=>item1.category_name===item.category_id)).id;
     }
     console.log("Data For adding:",item,category_id);
-    await axios.post(`http://13.234.231.241:8000/item/addItem`,{
+    await axios.post(`${LinkBasis}/item/addItem`,{
         item_name: item.item_name,
         rating: item.rating,
         cost: item.cost,
@@ -378,7 +378,7 @@ const LogOutFunc=()=>{
 
             alert,alertMessage,quan,setQuan,activeCart,
 
-            SignUpFunc,LoginFunc, LogOutFunc ,LoadUP
+            SignUpFunc,LoginFunc, LogOutFunc ,LoadUP,
                         }}>
             {children}
         </CartContext.Provider>
